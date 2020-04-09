@@ -1,9 +1,11 @@
-type(sniper).
-type(normal).
-type(horsTerrain).
+%Ancien :
+%type(sniper).
+%type(normal).
+%type(horsTerrain).
 
-adj(T1,T2) :- type(T1), type(T2), T1\==T2.
+%adj(T1,T2) :- type(T1), type(T2), T1\==T2.
 
+% AJOUTER TEST si Case(L1,C1) ou case(L2,C2)
 adjacenceCase(L1,C1,L2,C2):-
     L2 is L1+1, C2 is C1;
     L2 is L1-1, C2 is C1;
@@ -105,6 +107,7 @@ adjacenceCase([L1,C1,_,_],[L2,C2,_,_]):-
     L2 is L1-1, C2 is C1;
     L2 is L1, C2 is C1+1;
     L2 is L1, C2 is C1-1;
+
 
 ligneDroite([L1,C1,_,_],[L2,C2,_,_]):-
     L1 is L2;
