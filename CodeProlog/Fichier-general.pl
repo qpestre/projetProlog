@@ -4,6 +4,39 @@
 :- dynamic morts/2 .
 :- dynamic cases/2 .
 
+lecturePlateau :-   lectureCaseNormale,
+					lectureCaseSniper,
+					lectureCasePersonnage.
+
+lectureCaseNormale :-  repeat,
+			plateauCaseNormale,
+            write('La declaration des cases normales s affiche ? (oui : 1, non : 0)'),
+			read(X),
+			test(X),
+            nl,
+            !.
+
+lectureCaseSniper :-  repeat,
+			plateauCaseSniper,
+            write('La declaration des cases sniper s affiche ? (oui : 1, non : 0)'),
+			read(X),
+			test(X),
+            nl,
+            !.
+
+lectureCasePersonnage :-  repeat,
+			plateauCasePersonnage,
+            write('La declaration des cases personnage s affiche ? (oui : 1, non : 0)'),
+			read(X),
+			test(X),
+            nl,
+            !.
+
+%En prolog : ( condition -> then_clause ; else_clause )
+test(X):-   (X is 1 -> write('OUII');write('NON')).
+
+
+
 %Déclaration de tous nos faits
 initialize :-
     %Personnages vivants et morts
@@ -16,7 +49,7 @@ initialize :-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %1.Au début de chaque partie, une ville de 16 tuiles (8 cases normales et 8 cases sniper) est placée par les joueurs.
-% Nous avons fait le choix et avons accordé beaucoup de temps à comprendre l'aspect dynamique de PROLOG 
+% Nous avons fait le choix et avons accordé beaucoup de temps à comprendre l aspect dynamique de PROLOG 
 %en générant un plateau aléatoire :
 
 %Déclaration des faits dynamiques (modifiables)
@@ -61,7 +94,7 @@ afficheurCasePersonnage :-
      forall(case(Personnage,L,C), writeln(case(Personnage,L,C))).
     
     
-plateauNormale :-
+plateauCaseNormale :-
 	% On vide la base des caseNormales
 	retractall(caseNormale(_,_)),
 
@@ -101,19 +134,17 @@ caseHorsTerrain(L,C):- not(caseNormale(L,C)), not(caseSniper(L,C)).
 % De manière aléatoire
  
  
-plateauPersonnageCase :-
+plateauCasePersonnage :-
 	retractall(case(_,_,_)),
 
 	nombre_de_faits(N), %Ici N représente les 8 cases (8 normales et 8 sniper)
-	write('Nombre de case normales (Personnage,L,C) '), write(N), nl,
-    
+	
     %Pour toutes les 8 cases normales :
 	forall(caseNormale(LN,CN), %On leur associe un personnage aléatoire qui ne soit pas déjà placé sur le terrain, sur une case normale
-	       (    write('1'), I is random(16), personnage(I,Personnage), not(case(Personnage,_,_)),
+	       (    I is random(16), personnage(I,Personnage), not(case(Personnage,_,_)),
 		   assertz(case(Personnage,LN,CN)))),
 
     nombre_de_faits(N),
-	write('Nombre de case spéciales avec perso'), write(N), nl,
 
     %Pour toutes les 8 cases sniper :
 	forall(caseSniper(LS,CS),%On leur associe un personnage aléatoire qui ne soit pas déjà placé sur le terrain, sur une case sniper
@@ -121,8 +152,6 @@ plateauPersonnageCase :-
 		   assertz(case(Personnage,LS,CS)))),
  
 	% affichage des affectations des personnages aux cases
-    afficheurCaseNormale,
-    afficheurCaseSniper,
 	afficheurCasePersonnage.
 
 
